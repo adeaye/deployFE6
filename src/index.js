@@ -1,4 +1,4 @@
-const { fetchData } = require("./fetcher");
+const { fetchData, addData } = require("./fetcher");
 
 document.addEventListener('DOMContentLoaded', async () => {
     const productListElement = document.getElementById('productList');
@@ -32,4 +32,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }  
     await displayProducts();
+
+    const fd = document.getElementById('submitForm');
+    fd.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formContainer = new FormData(fd);
+
+        const payload = {
+            name: formContainer.get('name'),
+            price: formContainer.get('price'),
+            currency: "USD",
+        }
+        try {
+            const response = await addData(payload);
+            console.log('response', response);
+            await displayProducts();
+        } catch (error) {
+            throw error;
+        }
+    })
 })
